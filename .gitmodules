@@ -1,0 +1,18 @@
+[submodule "externals/SDL2"]
+	path = externals/SDL2
+	url = https://github.com/spurious/SDL-mirror.git
+[submodule "externals/assimp"]
+	path = externals/assimp
+	url = https://github.com/assimp/assimp.git
+[submodule "externals/bullet"]
+	path = externals/bullet
+	url = https://github.com/bulletphysics/bullet3.git
+[submodule "externals/glew"]
+	path = externals/glew
+	url = https://github.com/nigels-com/glew.git
+[submodule "externals/glm"]
+	path = externals/glm
+	url = https://github.com/g-truc/glm.git
+[submodule "externals/jsoncpp"]
+	path = externals/jsoncpp
+	url = https://github.com/open-source-parsers/jsoncpp.git
