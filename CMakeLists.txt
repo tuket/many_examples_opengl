@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.6)
 
-project(project_name)
+project(many_examples_opengl)
 
 # OpenGL
 find_package(OpenGL REQUIRED)
@@ -66,6 +66,10 @@ link_libraries(
 	"jsoncpp_lib"
 )
 
-add_executable(main
-	"src/main.cpp"
+add_executable(ex0
+	"examples/ex0/main.cpp"
+)
+
+add_executable(ex1
+	"examples/ex1/main.cpp"
 )
