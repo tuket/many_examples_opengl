@@ -1,1 +1,1 @@
-git clone --recursive git://github.com/foo/bar.git
+git clone --recursive https://github.com/tuket/many\_examples\_opengl.git
