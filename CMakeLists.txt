@@ -55,7 +55,7 @@ include_directories(
 )
 
 link_directories(
-	"externals/glew/lib/"
+	"${CMAKE_CURRENT_SOURCE_DIR}/externals/glew/lib"
 )
 
 link_libraries(
