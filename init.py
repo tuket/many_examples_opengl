@@ -3,5 +3,5 @@ from subprocess import call
 
 os.chdir("externals/glew")
 
-call(["make", "extensions"])
+call("make")
 
