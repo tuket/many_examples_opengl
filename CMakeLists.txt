@@ -70,6 +70,7 @@ link_libraries(
 	"assimp"
 	"BulletDynamics" "BulletCollision" "LinearMath"
 	"jsoncpp_lib"
+        "common_utils"
 )
 
 add_executable(ex0

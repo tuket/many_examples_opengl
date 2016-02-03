@@ -7,6 +7,20 @@
 
 using namespace std;
 
+bool fileToString(string& str, const string& fileName)
+{
+    fstream fs;
+    fs.open(fileName, fstream::in);
+    if(!fs.is_open()) return false;
+    fs.seekg(0, fs.end);
+    int length = fs.tellg();
+    fs.seekg(0, fs.beg);
+    if(length+1 >= str.size()) str.resize(length+1);
+    fs.read(&str[0], length);
+    str[length] = 0;
+    return true;
+}
+
 bool makeShaderProgram
 (
     GLuint &program,
@@ -24,11 +38,13 @@ bool makeShaderProgram
     int length;
     GLint compileOkVert, compileOkFrag;
 
-    fs.open(vertShadFileName, fstream::in);
-    ss << fs;
-    src = ss.str();
-    GLuint vertShad = glCreateShader(GL_VERTEX_SHADER);
+    if(!fileToString(src, vertShadFileName))
+    {
+        cout << "unable to open: "
+             << vertShadFileName << endl;
+    }
     pSrc = src.c_str();
+    GLuint vertShad = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertShad, 1, &pSrc, 0);
     glCompileShader(vertShad);
     glGetShaderiv(vertShad, GL_COMPILE_STATUS, &compileOkVert);
@@ -38,9 +54,12 @@ bool makeShaderProgram
         cout << errorStr << endl;
     }
 
-    fs.open(fragShadFileName, fstream::in);
-    ss << fs;
-    src = ss.str();
+    if(!fileToString((src), fragShadFileName))
+    {
+        cout << "unable to open: "
+             << fragShadFileName << endl;
+    }
+    pSrc = src.c_str();
     GLuint fragShad = glCreateShader(GL_FRAGMENT_SHADER);
     pSrc = src.c_str();
     glShaderSource(fragShad, 1, &pSrc, 0);
@@ -54,7 +73,6 @@ bool makeShaderProgram
 
     if(!compileOkVert || !compileOkFrag) return false;
 
-    program = glCreateProgram();
     glAttachShader(program, vertShad);
     glAttachShader(program, fragShad);
     glLinkProgram(program);
