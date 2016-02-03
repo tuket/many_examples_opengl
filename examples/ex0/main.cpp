@@ -4,6 +4,10 @@
 
 using namespace std;
 
+const unsigned FRAMES_PER_SEC = 60;
+const unsigned TICKS_PER_SEC = 1000;
+const unsigned TICKS_PER_FRAME = TICKS_PER_SEC / FRAMES_PER_SEC;
+
 int main()
 {
     SDL_Init(SDL_INIT_EVERYTHING);
@@ -20,7 +24,8 @@ int main()
                 SDL_WINDOW_OPENGL
             );
 
-    SDL_GLContext context = SDL_GL_CreateContext(window);
+   // SDL_GLContext context =
+            SDL_GL_CreateContext(window);
 
     GLenum glewError = glewInit();
     if(glewError != GLEW_OK)
@@ -110,6 +115,8 @@ int main()
     while(continueExec)
     {
 
+        int ticks = static_cast<int>(SDL_GetTicks());
+
         // handle events
         SDL_Event event;
         SDL_PollEvent(&event);
@@ -136,6 +143,12 @@ int main()
         glDrawElements(GL_POINTS, sizeof(inds)/sizeof(GLuint), GL_UNSIGNED_INT, 0);
 
         SDL_GL_SwapWindow(window);
+
+        ticks = static_cast<int>(SDL_GetTicks()) - ticks;
+        int waitTicks = static_cast<int>(TICKS_PER_FRAME) - ticks;
+
+        if(waitTicks > 0) SDL_Delay(static_cast<unsigned>(waitTicks));
+
     }
 
 }

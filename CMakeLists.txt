@@ -52,6 +52,12 @@ include_directories(
 	"externals/bullet/src"
 	"externals/jsoncpp/include"
 	"externals/rapidxml"
+        "common"
+)
+
+add_library("common_utils" STATIC
+        "common/utils.hpp"
+        "common/utils.cpp"
 )
 
 link_directories(
@@ -72,4 +78,6 @@ add_executable(ex0
 
 add_executable(ex1
 	"examples/ex1/main.cpp"
+        "examples/ex1/shaders/vert.glsl"
+        "examples/ex1/shaders/frag.glsl"
 )
