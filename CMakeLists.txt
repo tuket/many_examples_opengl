@@ -48,7 +48,7 @@ include_directories(
 	"externals/SDL2/include"
 	"externals/glm"
 	"externals/stb"
-	"externals/assimp/include"
+        "externals/assimp/include"
 	"externals/bullet/src"
 	"externals/jsoncpp/include"
 	"externals/rapidxml"
@@ -81,4 +81,10 @@ add_executable(ex1
 	"examples/ex1/main.cpp"
         "examples/ex1/shaders/vert.glsl"
         "examples/ex1/shaders/frag.glsl"
+)
+
+add_executable(ex2
+        "examples/ex2/main.cpp"
+        "examples/ex2/shaders/vert.glsl"
+        "examples/ex2/shaders/frag.glsl"
 )

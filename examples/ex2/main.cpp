@@ -1,8 +1,8 @@
 #include <iostream>
-#include <GL/glew.h>
 #include <SDL.h>
-#include "utils.hpp"
+#include <GL/glew.h>
 #include <vector>
+#include "utils.hpp"
 
 using namespace std;
 
@@ -15,6 +15,7 @@ vector<string> attribNames;
 void initAttribNames()
 {
     attribNames.push_back("pos");
+    attribNames.push_back("color");
 }
 
 int main()
@@ -29,15 +30,17 @@ int main()
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
     SDL_Window* window =
-            SDL_CreateWindow(
-                "example1",
+            SDL_CreateWindow
+            (
+                "example2",
                 100, 100,
-                800,600,
+                800, 600,
                 SDL_WINDOW_OPENGL
             );
 
-    // SDL_GLContext context =
-             SDL_GL_CreateContext(window);
+    //SDL_GLContext context =
+            SDL_GL_CreateContext(window);
+
 
     GLenum glewError = glewInit();
     if(glewError != GLEW_OK)
@@ -55,36 +58,58 @@ int main()
     GLuint VBO, EBO;
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
     GLfloat verts[] =
     {
-        0, 0.5f,
-        0.5f, -0.5f,
-        -0.5f, -0.5f
+        // pos          color
+        0, 0.5f,        1, 0, 0,
+        0.5f, -0.5f,    0, 1, 0,
+        -0.5f, -0.5f,   0, 0, 1
     };
     GLuint inds[] = {0, 1, 2, 0};
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(inds), inds, GL_STATIC_DRAW);
 
+    // shaders
     bool programOk;
     GLuint shaderProg = glCreateProgram();
 
     glBindAttribLocation(shaderProg, 0, attribNames[0].c_str());
+    glBindAttribLocation(shaderProg, 1, attribNames[1].c_str());
 
-    programOk =
-        makeShaderProgram
-                (
-                    shaderProg,
-                    "examples/ex1/shaders/vert.glsl",
-                    "examples/ex1/shaders/frag.glsl"
-                );
+    programOk = makeShaderProgram(shaderProg, "examples/ex2/shaders/vert.glsl", "examples/ex2/shaders/frag.glsl");
+    if(!programOk)
+    {
+        cout << "error in the shader program" << endl;
+        exit(1);
+    }
 
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(GLfloat), (void*)0);
+    glEnableVertexAttribArray(1);
+
+    glVertexAttribPointer   // + pos
+            (
+                0,          // attrib index
+                2,          // number of elements
+                GL_FLOAT,
+                GL_FALSE,   // normalize fixed point
+                5 * sizeof(GLfloat),          // stride
+                (void*) 0   // first element pos
+             );
+
+    glVertexAttribPointer   // + color
+            (
+                1,          // attrib index
+                3,          // number of elements
+                GL_FLOAT,
+                GL_FALSE,   // normalize fixed point
+                5 * sizeof(GLfloat),          // stride
+                (void*) (2*sizeof(GLfloat))   // first element pos
+            );
+
 
     bool continueExec = true;
     while(continueExec)
@@ -124,6 +149,5 @@ int main()
         if(waitTicks > 0) SDL_Delay(static_cast<unsigned>(waitTicks));
 
     }
-
 
 }
