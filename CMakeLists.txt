@@ -88,3 +88,9 @@ add_executable(ex2
         "examples/ex2/shaders/vert.glsl"
         "examples/ex2/shaders/frag.glsl"
 )
+
+add_executable(ex3
+        "examples/ex3/main.cpp"
+        "examples/ex3/shaders/vert.glsl"
+        "examples/ex3/shaders/frag.glsl"
+)
