@@ -14,5 +14,5 @@ The examples have to be run from the root directory.
 
 If you want to debug the examples run cmake like this:
 ```
-cmake -DCMAKE_BUILD_TYPE=Release ..
+cmake -DCMAKE_BUILD_TYPE=Debug ..
 ```
