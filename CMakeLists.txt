@@ -91,6 +91,4 @@ add_executable(ex2
 
 add_executable(ex3
         "examples/ex3/main.cpp"
-        "examples/ex3/shaders/vert.glsl"
-        "examples/ex3/shaders/frag.glsl"
 )
