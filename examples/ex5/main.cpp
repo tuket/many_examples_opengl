@@ -8,7 +8,7 @@ using namespace std;
 
 const unsigned FRAMES_PER_SEC = 60;
 const unsigned TICKS_PER_SEC = 1000;
-const unsigned TICKS_PER_FRAME = 1000/60;
+const unsigned TICKS_PER_FRAME = TICKS_PER_FRAME / FRAMES_PER_SEC;
 
 vector<string> attribNames;
 
