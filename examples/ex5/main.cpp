@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <string>
 #include <SDL.h>
 #include <GL/glew.h>
 #include "utils.hpp"
