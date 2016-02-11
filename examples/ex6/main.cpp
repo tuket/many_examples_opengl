@@ -20,7 +20,7 @@ void initNames()
     attribNames.push_back("pos");
     attribNames.push_back("texCoord0");
 
-    textures.push_back("tex0");
+    textures.push_back("texture0");
 }
 
 int main()
@@ -127,9 +127,11 @@ int main()
     // uniforms & textures
     GLuint texture;
     glGenTextures(1, &texture);
-    GLuint texUnif = glGetUniformLocation(shadProgram, "texture0");
+    GLuint texUnif = glGetUniformLocation(shadProgram, textures[0].c_str());
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     int w, h, comp;
     GLubyte* imgData = loadImage("img/vamp.png", w, h, comp);
     glTexImage2D
@@ -144,6 +146,48 @@ int main()
                 imgData
             );
     freeImage(imgData);
-    glUniform1i(texUnifm, 0);
+    glUniform1i(texUnif, 0);
+
+    bool continueExec = true;
+    int ticks = SDL_GetTicks();
+    while(continueExec)
+    {
+        int newTicks = static_cast<int>(SDL_GetTicks());
+
+        // handle events
+        SDL_Event event;
+        SDL_PollEvent(&event);
+        if(event.type == SDL_QUIT)
+        {
+            continueExec = false;
+        }
+        else if(event.type == SDL_KEYDOWN)
+        {
+            switch(event.key.keysym.sym)
+            {
+                case SDLK_ESCAPE:
+                    continueExec = false;
+                break;
+            }
+        }
+
+        // draw stuff
+        glClear(GL_COLOR_BUFFER_BIT);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        glUseProgram(shadProgram);
+
+        glDrawElements(GL_TRIANGLE_STRIP, sizeof(inds)/sizeof(GLuint), GL_UNSIGNED_INT, 0);
+
+        SDL_GL_SwapWindow(window);
+
+        int ticksDiff = newTicks - ticks;
+        ticks = newTicks;
+
+        int waitTicks = static_cast<int>(TICKS_PER_FRAME) - (SDL_GetTicks() - newTicks) ;
+
+        if(waitTicks > 0) SDL_Delay(static_cast<unsigned>(waitTicks));
+
+    }
 
 }

@@ -108,7 +108,7 @@ void invertY(GLubyte* data, int w, int h)
     {
         for(int x=0; x<w; x++)
         {
-            swap( data[x + y*w], data[x + (h-1-y)*w] );
+            swap( d[x + y*w], d[x + (h-1-y)*w] );
         }
     }
 }
