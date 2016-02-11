@@ -102,6 +102,7 @@ int main()
                 (void*) 0   // first element pos
              );
 
+    // uniforms
     GLuint globColorUnif = glGetUniformLocation(shadProgram, "u_globColor");
     glUniform3f(globColorUnif, 1, 1, 1);
 

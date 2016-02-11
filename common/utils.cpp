@@ -4,6 +4,8 @@
 #include <memory>
 #include <string>
 #include <vector>
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image.h>
 
 using namespace std;
 
@@ -97,4 +99,28 @@ bool makeShaderProgram
 
     return true;
 
+}
+
+void invertY(GLubyte* data, int w, int h)
+{
+    unsigned* d = (unsigned*)data;
+    for(int y=0; y<h/2; y++)
+    {
+        for(int x=0; x<w; x++)
+        {
+            swap( data[x + y*w], data[x + (h-1-y)*w] );
+        }
+    }
+}
+
+GLubyte* loadImage(const string& fileName, int &w, int &h, int& comp)
+{
+    GLubyte* data = stbi_load(fileName.c_str(), &w, &h, &comp, 4);
+    invertY(data, w, h);
+    return data;
+}
+
+void freeImage(GLubyte* imgData)
+{
+    stbi_image_free(imgData);
 }
