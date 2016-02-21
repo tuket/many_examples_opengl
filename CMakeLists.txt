@@ -110,3 +110,9 @@ add_executable(ex6
         "examples/ex6/shaders/vert.glsl"
         "examples/ex6/shaders/frag.glsl"
 )
+
+add_executable(ex7
+        "examples/ex7/main.cpp"
+        "examples/ex7/shaders/vert.glsl"
+        "examples/ex7/shaders/frag.glsl"
+)
