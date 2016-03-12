@@ -5,6 +5,10 @@
 #include <GL/glew.h>
 #include <stb_image.h>
 #include <utils.hpp>
+#include <glm/common.hpp>
+#include <glm/glm.hpp>
+#include <glm/ext.hpp>
+#include <glm/mat4x4.hpp>
 
 using namespace std;
 
@@ -15,12 +19,21 @@ const unsigned TICKS_PER_FRAME = TICKS_PER_SEC / FRAMES_PER_SEC;
 vector<string> attribNames;
 vector<string> textures;
 
+// uniform names
+struct UniformNames
+{
+    const static string transfMat;
+};
+
+const string UniformNames::transfMat = "transfMat";
+
 void initNames()
 {
     attribNames.push_back("pos");
     attribNames.push_back("texCoord0");
 
     textures.push_back("texture0");
+
 }
 
 int main()
@@ -91,8 +104,8 @@ int main()
     bool programOk = makeShaderProgram
                     (
                         shadProgram,
-                        "examples/ex6/shaders/vert.glsl",
-                        "examples/ex6/shaders/frag.glsl"
+                        "examples/ex7/shaders/vert.glsl",
+                        "examples/ex7/shaders/frag.glsl"
                     );
 
     if(!programOk)
@@ -125,6 +138,7 @@ int main()
              );
 
     // uniforms & textures
+    glUseProgram(shadProgram);
     GLuint texture;
     glGenTextures(1, &texture);
     GLuint texUnif = glGetUniformLocation(shadProgram, textures[0].c_str());
@@ -148,6 +162,15 @@ int main()
     freeImage(imgData);
     glUniform1i(texUnif, 0);
 
+    const float SECONDS_PER_SPIN = 2;
+    const float ROTATION_PER_SEC = 2* M_PI / SECONDS_PER_SPIN;
+    const float ROTATION_PER_FRAME = ROTATION_PER_SEC / FRAMES_PER_SEC;
+    GLuint transfMathUnif = glGetUniformLocation(shadProgram, UniformNames::transfMat.c_str());
+    float quadRotation = 0.f;
+    glm::mat4 mat =
+        glm::rotate(quadRotation, glm::vec3(0, 1, 0));
+    glUniformMatrix4fv(transfMathUnif, 1, GL_FALSE, glm::value_ptr(mat));
+
     bool continueExec = true;
     int ticks = SDL_GetTicks();
     while(continueExec)
@@ -170,6 +193,12 @@ int main()
                 break;
             }
         }
+
+        // rotate quad
+        quadRotation += ROTATION_PER_FRAME;
+        glm::mat4 mat =
+            glm::rotate(quadRotation, glm::vec3(0, 1, 0));
+        glUniformMatrix4fv(transfMathUnif, 1, GL_FALSE, glm::value_ptr(mat));
 
         // draw stuff
         glClear(GL_COLOR_BUFFER_BIT);
