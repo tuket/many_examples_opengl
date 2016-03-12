@@ -52,7 +52,7 @@ int main()
     SDL_Window* window =
             SDL_CreateWindow
             (
-                "example 6",
+                "example 8",
                 100, 100,
                 800, 600,
                 SDL_WINDOW_OPENGL

@@ -122,3 +122,7 @@ add_executable(ex7
 add_executable(ex8
         "examples/ex8/main.cpp"
 )
+
+add_executable(ex9
+        "examples/ex9/main.cpp"
+)

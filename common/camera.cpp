@@ -95,6 +95,16 @@ void Camera::setFovY(float fovY)
     _fovY = fovY;
 }
 
+void Camera::translateLocal(const glm::vec3& disp)
+{
+    glm::mat4 r =
+            glm::rotate(_roll, glm::vec3(0, 0, 1)) *
+            glm::rotate(_pitch, glm::vec3(1, 0, 0)) *
+            glm::rotate(_heading, glm::vec3(0, 1, 0));
+    glm::vec4 v = r * glm::vec4(disp, 1);
+    _position += glm::vec3(v);
+}
+
 glm::mat4 Camera::getTransfMat()const
 {
     glm::mat4 p = glm::perspective(_fovY, _fovX/_fovY, _near, _far);

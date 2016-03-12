@@ -4,11 +4,13 @@
 #include <SDL.h>
 #include <GL/glew.h>
 #include <stb_image.h>
-#include <utils.hpp>
 #include <glm/common.hpp>
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 #include <glm/mat4x4.hpp>
+
+#include <camera.hpp>
+#include <utils.hpp>
 
 using namespace std;
 
@@ -50,7 +52,7 @@ int main()
     SDL_Window* window =
             SDL_CreateWindow
             (
-                "example 7",
+                "example 9",
                 100, 100,
                 800, 600,
                 SDL_WINDOW_OPENGL
@@ -162,13 +164,10 @@ int main()
     freeImage(imgData);
     glUniform1i(texUnif, 0);
 
-    const float SECONDS_PER_SPIN = 2;
-    const float ROTATION_PER_SEC = 2* M_PI / SECONDS_PER_SPIN;
-    const float ROTATION_PER_FRAME = ROTATION_PER_SEC / FRAMES_PER_SEC;
     GLuint transfMathUnif = glGetUniformLocation(shadProgram, UniformNames::transfMat.c_str());
-    float quadRotation = 0.f;
-    glm::mat4 mat =
-        glm::rotate(quadRotation, glm::vec3(0, 1, 0));
+    Camera cam;
+    cam.setPosition(glm::vec3(0, 0, 2));
+    glm::mat4 mat = cam.getTransfMat();
     glUniformMatrix4fv(transfMathUnif, 1, GL_FALSE, glm::value_ptr(mat));
 
     bool continueExec = true;
@@ -193,11 +192,57 @@ int main()
                 break;
             }
         }
+        else if(event.type == SDL_KEYUP)
+        {
+            switch(event.key.keysym.sym)
+            {
+            }
 
-        // rotate quad
-        quadRotation += ROTATION_PER_FRAME;
-        glm::mat4 mat =
-            glm::rotate(quadRotation, glm::vec3(0, 1, 0));
+        }
+
+        const Uint8* keyState = SDL_GetKeyboardState(NULL);
+        bool forwardPressed = keyState[SDL_SCANCODE_W];
+        bool backwardPressed = keyState[SDL_SCANCODE_S];
+        bool leftPressed = keyState[SDL_SCANCODE_A];
+        bool rightPressed = keyState[SDL_SCANCODE_D];
+        bool latLeftPressed = keyState[SDL_SCANCODE_Q];
+        bool latRightPressed= keyState[SDL_SCANCODE_E];
+
+        // cam move
+        const float CAM_SPEED = 0.02;
+        glm::vec3 disp;
+        float h = 0;
+        if(forwardPressed)
+        {
+            disp = glm::vec3(0, 0, -1);
+        }
+        else if(backwardPressed)
+        {
+            disp = glm::vec3(0, 0, 1);
+        }
+        if(leftPressed)
+        {
+            h = degToRad(0.5);
+        }
+        else if(rightPressed)
+        {
+            h = degToRad(-0.5);
+        }
+        if(latLeftPressed)
+        {
+            disp += glm::vec3(-1, 0, 0);
+        }
+        else if(latRightPressed)
+        {
+            disp += glm::vec3(1, 0, 0);
+        }
+        disp = disp / disp.length();
+        disp *= CAM_SPEED;
+        float heading = cam.getHeading();
+        heading += h;
+        cam.translateLocal(disp);
+        cam.setHeading(heading);
+        mat = cam.getTransfMat();
         glUniformMatrix4fv(transfMathUnif, 1, GL_FALSE, glm::value_ptr(mat));
 
         // draw stuff

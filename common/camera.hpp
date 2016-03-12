@@ -28,6 +28,8 @@ public:
     void setFovX(float fovX);
     void setFovY(float fovY);
 
+    void translateLocal(const glm::vec3& disp);
+
     glm::mat4 getTransfMat()const;
 
 protected:
