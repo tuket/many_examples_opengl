@@ -58,6 +58,8 @@ include_directories(
 add_library("common_utils" STATIC
         "common/utils.hpp"
         "common/utils.cpp"
+        "common/camera.hpp"
+        "common/camera.cpp"
 )
 
 link_directories(
@@ -115,4 +117,8 @@ add_executable(ex7
         "examples/ex7/main.cpp"
         "examples/ex7/shaders/vert.glsl"
         "examples/ex7/shaders/frag.glsl"
+)
+
+add_executable(ex8
+        "examples/ex8/main.cpp"
 )

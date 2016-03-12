@@ -124,3 +124,13 @@ void freeImage(GLubyte* imgData)
 {
     stbi_image_free(imgData);
 }
+
+float degToRad(float deg)
+{
+    return (deg*M_PI) / 180.f;
+}
+
+float radToDeg(float rad)
+{
+    return (rad*180.f) / M_PI;
+}

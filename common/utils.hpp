@@ -11,3 +11,6 @@ bool makeShaderProgram
 GLubyte* loadImage(const std::string& fileName, int &w, int &h, int& comp);
 
 void freeImage(GLubyte* imgData);
+
+float degToRad(float deg);
+float radToDeg(float rad);
