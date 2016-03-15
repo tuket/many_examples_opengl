@@ -126,3 +126,9 @@ add_executable(ex8
 add_executable(ex9
         "examples/ex9/main.cpp"
 )
+
+add_executable(ex10
+        "examples/ex10/main.cpp"
+        "examples/ex10/shaders/vert.glsl"
+        "examples/ex10/shaders/frag.glsl"
+)
