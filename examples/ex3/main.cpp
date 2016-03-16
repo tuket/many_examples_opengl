@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <SDL.h>
-#include <GL/glew.h>
+#include <glad/glad.h>
 #include "utils.hpp"
 
 using namespace std;
@@ -41,15 +41,17 @@ int main()
     //SDL_GLContext context =
             SDL_GL_CreateContext(window);
 
-    GLenum glewError = glewInit();
-    if(glewError != GLEW_OK)
-    {
-        cout << "Error: glewInit(): "
-             << glewGetErrorString(glewError)
-             << endl;
-        exit(1);
+    if(!gladLoadGL()) {
+        printf("glad error!\n");
+        exit(-1);
     }
-    cout << "Using GLEW " << glewGetString(GLEW_VERSION) << endl;
+    printf("OpenGL %d.%d\n", GLVersion.major, GLVersion.minor);
+    if (GLVersion.major < 2) {
+        printf("Your system doesn't support OpenGL >= 2!\n");
+        return -1;
+    }
+    printf("OpenGL %s, GLSL %s\n", glGetString(GL_VERSION),
+           glGetString(GL_SHADING_LANGUAGE_VERSION));
 
     glClearColor(0, 0, 0, 1);
 

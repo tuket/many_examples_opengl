@@ -44,7 +44,7 @@ add_subdirectory("externals/jsoncpp")
 
 
 include_directories(
-	"externals/glew/include"
+	"externals/glad/include"
 	"externals/SDL2/include"
 	"externals/glm"
 	"externals/stb"
@@ -62,17 +62,21 @@ add_library("common_utils" STATIC
         "common/camera.cpp"
 )
 
+add_library("glad" STATIC
+	"externals/glad/src/glad.c"
+)
+
 link_directories(
 	"${CMAKE_CURRENT_SOURCE_DIR}/externals/glew/lib"
 )
 
 link_libraries(
 	"SDL2" "SDL2main"
-	"GLEW"
+	"glad"
 	"assimp"
 	"BulletDynamics" "BulletCollision" "LinearMath"
 	"jsoncpp_lib"
-        "common_utils"
+		"common_utils"
 )
 
 add_executable(ex0
