@@ -60,6 +60,7 @@ add_library("common_utils" STATIC
         "common/utils.cpp"
         "common/camera.hpp"
         "common/camera.cpp"
+        "common/numeric_constants.hpp"
 )
 
 add_library("glad" STATIC

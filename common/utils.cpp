@@ -6,7 +6,9 @@
 #include <vector>
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
+#include "numeric_constants.hpp"
 
+using namespace NC;
 using namespace std;
 
 bool fileToString(string& str, const string& fileName)
@@ -127,10 +129,10 @@ void freeImage(GLubyte* imgData)
 
 float degToRad(float deg)
 {
-    return (deg*M_PI) / 180.f;
+    return (deg*PI) / 180.f;
 }
 
 float radToDeg(float rad)
 {
-    return (rad*180.f) / M_PI;
+    return (rad*180.f) / PI;
 }

@@ -39,17 +39,17 @@ int main()
     // SDL_GLContext context =
              SDL_GL_CreateContext(window);
 
-    if(!gladLoadGL()) {
-        printf("glad error!\n");
-        exit(-1);
-    }
-    printf("OpenGL %d.%d\n", GLVersion.major, GLVersion.minor);
-    if (GLVersion.major < 2) {
-        printf("Your system doesn't support OpenGL >= 2!\n");
-        return -1;
-    }
-    printf("OpenGL %s, GLSL %s\n", glGetString(GL_VERSION),
-           glGetString(GL_SHADING_LANGUAGE_VERSION));
+     if(!gladLoadGL()) {
+         cout << "glad error!" << endl;
+         exit(-1);
+     }
+     cout << "OpenGL  " << GLVersion.major << "." << GLVersion.minor << endl;
+     if (GLVersion.major < 2) {
+         cout << "Your system doesn't support OpenGL >= 2!\n" << endl;
+         return -1;
+     }
+     cout << "OpenGL " << glGetString(GL_VERSION)
+          << ", GLSL " << glGetString(GL_SHADING_LANGUAGE_VERSION) << endl;
 
     glClearColor(0, 0, 0, 1);
 
