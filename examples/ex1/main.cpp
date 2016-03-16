@@ -17,7 +17,7 @@ void initAttribNames()
     attribNames.push_back("pos");
 }
 
-int main()
+int main(int argc, char** argv)
 {
 
     initAttribNames();

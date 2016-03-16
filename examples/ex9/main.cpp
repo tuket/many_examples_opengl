@@ -38,7 +38,7 @@ void initNames()
 
 }
 
-int main()
+int main(int argc, char** argv)
 {
 
     initNames();

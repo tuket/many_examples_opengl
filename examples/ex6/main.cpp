@@ -23,7 +23,7 @@ void initNames()
     textures.push_back("texture0");
 }
 
-int main()
+int main(int argc, char** argv)
 {
 
     initNames();

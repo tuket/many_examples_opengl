@@ -8,7 +8,7 @@ const unsigned FRAMES_PER_SEC = 60;
 const unsigned TICKS_PER_SEC = 1000;
 const unsigned TICKS_PER_FRAME = TICKS_PER_SEC / FRAMES_PER_SEC;
 
-int main()
+int main(int argc, char** argv)
 {
     SDL_Init(SDL_INIT_EVERYTHING);
 

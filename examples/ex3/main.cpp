@@ -18,7 +18,7 @@ void initAttribNames()
     attribNames.push_back("color");
 }
 
-int main()
+int main(int argc, char** argv)
 {
 
     initAttribNames();
