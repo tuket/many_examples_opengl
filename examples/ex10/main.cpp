@@ -55,7 +55,7 @@ int main(int argc, char** argv)
     SDL_Window* window =
             SDL_CreateWindow
             (
-                "example 9",
+                "example 10",
                 100, 100,
                 800, 600,
                 SDL_WINDOW_OPENGL
@@ -184,8 +184,9 @@ int main(int argc, char** argv)
     GLuint texUnif = glGetUniformLocation(shadProgram, textures[0].c_str());
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
     int w, h, comp;
     GLubyte* imgData = loadImage(textureNameStr, w, h, comp);
     glTexImage2D
