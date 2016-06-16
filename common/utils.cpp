@@ -118,6 +118,10 @@ void invertY(GLubyte* data, int w, int h)
 GLubyte* loadImage(const string& fileName, int &w, int &h, int& comp)
 {
     GLubyte* data = stbi_load(fileName.c_str(), &w, &h, &comp, 4);
+    if(data == 0)
+    {
+        cout << "error loading texture: " << fileName << endl;
+    }
     invertY(data, w, h);
     return data;
 }

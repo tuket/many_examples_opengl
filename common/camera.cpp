@@ -95,24 +95,41 @@ void Camera::setFovY(float fovY)
     _fovY = fovY;
 }
 
+#include <iostream>
+using namespace std;
+
 void Camera::translateLocal(const glm::vec3& disp)
 {
     glm::mat4 r =
-            glm::rotate(_roll, glm::vec3(0, 0, 1)) *
+            glm::rotate(_heading, glm::vec3(0, 1, 0)) *
             glm::rotate(_pitch, glm::vec3(1, 0, 0)) *
-            glm::rotate(_heading, glm::vec3(0, 1, 0));
+            glm::rotate(_roll, glm::vec3(0, 0, 1));
     glm::vec4 v = r * glm::vec4(disp, 1);
-    _position += glm::vec3(v);
+    _position += glm::vec3(v.x, v.y, v.z);
 }
 
 glm::mat4 Camera::getTransfMat()const
 {
     glm::mat4 p = glm::perspective(_fovY, _fovX/_fovY, _near, _far);
-    glm::mat4 r =
-            glm::rotate(-_heading, glm::vec3(0, 1, 0)) *
-            glm::rotate(-_pitch, glm::vec3(1, 0, 0)) *
-            glm::rotate(-_roll, glm::vec3(0, 0, 1));
-    glm::mat4 t = glm::translate(-_position);
-    glm::mat4 res = p * r * t;
+    glm::mat4 v = getViewMat();
+    glm::mat4 res = p * v;
     return res;
+}
+
+glm::mat4 Camera::getProjMat()const
+{
+    glm::mat4 p = glm::perspective(_fovY, _fovX/_fovY, _near, _far);
+    return p;
+}
+
+glm::mat4 Camera::getViewMat()const
+{
+    glm::mat4 r =
+            glm::rotate(_heading, glm::vec3(0, 1, 0)) *
+            glm::rotate(_pitch, glm::vec3(1, 0, 0)) *
+            glm::rotate(_roll, glm::vec3(0, 0, 1));
+    glm::mat4 t = glm::translate(_position);
+    glm::mat4 view = t * r;
+    view = glm::inverse(view);
+    return view;
 }

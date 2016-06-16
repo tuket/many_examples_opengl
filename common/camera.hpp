@@ -31,6 +31,8 @@ public:
     void translateLocal(const glm::vec3& disp);
 
     glm::mat4 getTransfMat()const;
+    glm::mat4 getProjMat()const;
+    glm::mat4 getViewMat()const;
 
 protected:
 

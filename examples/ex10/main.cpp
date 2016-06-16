@@ -203,11 +203,11 @@ int main(int argc, char** argv)
     freeImage(imgData);
     glUniform1i(texUnif, 0);
 
-    GLuint transfMathUnif = glGetUniformLocation(shadProgram, UniformNames::transfMat.c_str());
+    GLuint transfMatUnif = glGetUniformLocation(shadProgram, UniformNames::transfMat.c_str());
     Camera cam;
     cam.setPosition(glm::vec3(0, 0, 3));
     glm::mat4 mat = cam.getTransfMat();
-    glUniformMatrix4fv(transfMathUnif, 1, GL_FALSE, glm::value_ptr(mat));
+    glUniformMatrix4fv(transfMatUnif, 1, GL_FALSE, glm::value_ptr(mat));
 
     bool continueExec = true;
     int ticks = SDL_GetTicks();
@@ -282,7 +282,7 @@ int main(int argc, char** argv)
         cam.translateLocal(disp);
         cam.setHeading(heading);
         mat = cam.getTransfMat();
-        glUniformMatrix4fv(transfMathUnif, 1, GL_FALSE, glm::value_ptr(mat));
+        glUniformMatrix4fv(transfMatUnif, 1, GL_FALSE, glm::value_ptr(mat));
 
         // draw stuff
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -294,9 +294,7 @@ int main(int argc, char** argv)
 
         SDL_GL_SwapWindow(window);
 
-        int ticksDiff = newTicks - ticks;
         ticks = newTicks;
-
         int waitTicks = static_cast<int>(TICKS_PER_FRAME) - (SDL_GetTicks() - newTicks) ;
 
         if(waitTicks > 0) SDL_Delay(static_cast<unsigned>(waitTicks));
