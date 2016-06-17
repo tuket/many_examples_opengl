@@ -14,7 +14,7 @@ using namespace std;
 bool fileToString(string& str, const string& fileName)
 {
     fstream fs;
-    fs.open(fileName, fstream::in);
+    fs.open(fileName.c_str(), fstream::in);
     if(!fs.is_open()) return false;
     fs.seekg(0, fs.end);
     int length = fs.tellg();
