@@ -27,9 +27,15 @@ void main()
     vec3 rawColor = texture2D(tex0, var_texCoord0).rgb;
     vec3 rawNormal = texture2D(texNormal, var_texCoord0).rgb;
 
+    mat3 normalMat = mat3(var_tangent, var_bitangent, var_normal);
+    vec3 normal = normalMat * normalize(rawNormal*2-1);
+    normal = normalize(normal);
+
     gl_FragColor = vec4(ambientLight * rawColor, 0);
-    float intens = dot(dirLight.dir, var_normal);
-    //if(intens < 0 ) intens = 0;
-        gl_FragColor = vec4(var_normal.xyx, 0);
+    float intens = dot(-dirLight.dir, normal);
+
+    if(intens < 0 ) intens = 0;
+        gl_FragColor += intens * vec4(rawColor, 1);
+
 
 }

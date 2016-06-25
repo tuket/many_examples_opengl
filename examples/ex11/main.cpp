@@ -55,7 +55,19 @@ void initNames()
 
     textures.push_back("tex0");
     textures.push_back("texNormal");
+    textures.push_back("texSpecular");
 }
+
+struct TexSlots{
+    enum
+    {
+        DIFFUSE = 0,
+        NORMAL,
+        SPECULAR,
+    };
+};
+
+GLuint bindTexture(GLuint shadProg, GLuint texSlot, const char* texPath);
 
 int main(int argc, char** argv)
 {
@@ -271,53 +283,10 @@ int main(int argc, char** argv)
             );
 
     // uniforms & textures
-    glUseProgram(shadProgram);      // it's important to use the shaderenderedr before
-    GLuint diffuseTex, normalTex;
-    glGenTextures(1, &diffuseTex);
-    glGenTextures(1, &normalTex);
-    GLuint diffuseTexUnif = glGetUniformLocation(shadProgram, textures[0].c_str());
-    GLuint normalTexUnif = glGetUniformLocation(shadProgram, textures[1].c_str());
-
-    GLuint textureId = 0;
-    glActiveTexture(GL_TEXTURE0 + textureId);
-    glBindTexture(GL_TEXTURE_2D, diffuseTex);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-    int w, h, comp;
-    GLubyte* imgData = loadImage(diffuseTexName.C_Str(), w, h, comp);
-    glTexImage2D
-            (
-                GL_TEXTURE_2D,
-                0,                  // mipmap reduction level
-                GL_RGBA,
-                w, h,
-                0,                  // border: this value must be 0
-                GL_RGBA,
-                GL_UNSIGNED_BYTE,
-                imgData
-            );
-    freeImage(imgData);
-    glUniform1i(diffuseTexUnif, textureId);
-
-    textureId = 1;
-    glActiveTexture(GL_TEXTURE0 + textureId);
-    glBindTexture(GL_TEXTURE_2D, normalTex);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-    imgData = loadImage(normalTexName.C_Str(), w, h, comp);
-    glTexImage2D
-            (
-                GL_TEXTURE_2D,
-                0,              // mipmap reduction level
-                GL_RGBA,
-                w, h,
-                0,              // border : this value must be 0
-                GL_RGBA,
-                GL_UNSIGNED_BYTE,
-                imgData
-            );
+    glUseProgram(shadProgram);      // it's important to use the shader before
+    bindTexture(shadProgram, TexSlots::DIFFUSE, diffuseTexName.C_Str());
+    bindTexture(shadProgram, TexSlots::NORMAL, normalTexName.C_Str());
+    bindTexture(shadProgram, TexSlots::SPECULAR, specularTexName.C_Str());
 
     GLuint transfMatUnif = glGetUniformLocation(shadProgram, UniformNames::transfMat.c_str());
     Camera cam;
@@ -348,9 +317,11 @@ int main(int argc, char** argv)
     GLuint dirLightColorUnif = glGetUniformLocation(shadProgram, (UniformNames::dirLight + ".color").c_str());
     GLuint dirLightDirUnif = glGetUniformLocation(shadProgram, (UniformNames::dirLight + ".dir").c_str());
     const GLfloat dirLightColor[] = {0.9f, 0.9f, 0.9f};
-    const GLfloat dirLightDir[] = {0.0f, -1.0f, 0.0f};
+    const GLfloat dirLightDir[] = {1.0f, 0.0f, -1.0f};
+    glm::vec3 dirLightDirVec = glm::vec3(dirLightDir[0], dirLightDir[1], dirLightDir[2]);
+    dirLightDirVec = glm::normalize(dirLightDirVec);
     glUniform3fv(dirLightColorUnif, 1, dirLightColor);
-    glUniform3fv(dirLightDirUnif, 1, dirLightDir);
+    glUniform3fv(dirLightDirUnif, 1, glm::value_ptr(dirLightDirVec));
 
     int prevMouseX, prevMouseY;
     bool prevMousePressed = false;
@@ -477,5 +448,36 @@ int main(int argc, char** argv)
         if(waitTicks > 0) SDL_Delay(static_cast<unsigned>(waitTicks));
 
     }
+
+}
+
+
+GLuint bindTexture(GLuint shadProg, GLuint texSlot, const char* texPath)
+{
+
+    GLuint tex;
+    glGenTextures(1, &tex);
+    GLuint unif = glGetUniformLocation(shadProg, textures[texSlot].c_str());
+
+    glActiveTexture(GL_TEXTURE0 + texSlot);
+    glBindTexture(GL_TEXTURE_2D, tex);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+    int w, h, comp;
+    GLubyte* imgData = loadImage(texPath, w, h, comp);
+    glTexImage2D
+            (
+                GL_TEXTURE_2D,
+                0,                  // mipmap reduction level
+                GL_RGBA,
+                w, h,
+                0,                  // border: this value must be 0
+                GL_RGBA,
+                GL_UNSIGNED_BYTE,
+                imgData
+            );
+    freeImage(imgData);
+    glUniform1i(unif, texSlot);
 
 }

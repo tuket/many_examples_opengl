@@ -32,8 +32,7 @@ void main()
     vec4 normal4 = modelMat * vec4(normal, 1);
     vec4 tangent4 = modelMat * vec4(tangent, 1);
     vec4 bitangent4 = modelMat * vec4(bitangent, 1);
-    var_normal = normal4.xyz;
-    float normalLen = sqrt(var_normal.x*var_normal.x + var_normal.y*var_normal.y + var_normal.z*var_normal.z);
-    var_tangent = tangent4.xyz;
-    var_bitangent = bitangent4.xyz;
+    var_normal = normalize(normal4.xyz);
+    var_tangent = normalize(tangent4.xyz);
+    var_bitangent = normalize(bitangent4.xyz);
 }
